@@ -1,0 +1,22 @@
+quiz:
+  passed-score: 3
+  questions-quantity: 5
+  questions:
+    base-path: questions
+    localized-resources:
+#      ключ - произвольное уникальное значение
+#      значение - локаль для вывода сообщений и имя источника с вопросами
+      russian:
+        default-locale: true
+        locale: ru
+        source: questions_ru.csv
+      english:
+        locale: en
+        source: questions.csv
+
+spring:
+  messages:
+    basename: i18n/messages
+  output:
+    ansi:
+      enabled: always
