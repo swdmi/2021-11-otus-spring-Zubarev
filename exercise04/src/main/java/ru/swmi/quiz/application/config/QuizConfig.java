@@ -24,15 +24,17 @@ public class QuizConfig implements QuizParamsProvider, QuestionsSourceProvider {
 
     }
 
+    @Override
     public String getBasePath() {
         return questions.getBasePath();
     }
 
+    @Override
     public Map<String, LocalizedResource> getLocalizedResources() {
         return questions.getLocalizedResources();
     }
 
-
+    @Override
     public LocalizedResource getDefaultLocalizedResource() {
         return questions.getLocalizedResources().values().stream()
                 .filter(LocalizedResource::isDefaultLocale)

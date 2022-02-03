@@ -1,0 +1,13 @@
+quiz:
+  questions:
+    localized-resources:
+      french:
+        locale: fr
+        default-locale: false
+        source: questions.csv
+      russian:
+        locale: ru
+        default-locale: false
+      english:
+        locale: en
+        default-locale: false
