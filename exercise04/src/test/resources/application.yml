@@ -1,0 +1,20 @@
+spring:
+  shell:
+    interactive:
+      enabled: false
+  main:
+    allow-circular-references: true
+
+quiz:
+  passed-score: 3
+  questions-quantity: 5
+  questions:
+    base-path: questions
+    localized-resources:
+      russian:
+        locale: ru
+        source: questions_ru.csv
+      english:
+        locale: en
+        default-locale: true
+        source: questions.csv

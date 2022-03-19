@@ -13,7 +13,7 @@ class QuestionsParserCSVTest extends QuizAbstractTest {
     @InjectMocks
     QuestionsParserCSV questionsParser;
 
-    @DisplayName("Test for CSV parsing")
+    @DisplayName("Возвращает список вопросов в объектном представлении")
     @Test
     void shouldParseQuestions() {
         assertThat(questionsParser.parseQuestions(source)).isEqualTo(questions);

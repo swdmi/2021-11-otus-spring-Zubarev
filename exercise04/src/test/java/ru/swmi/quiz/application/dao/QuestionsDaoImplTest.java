@@ -22,7 +22,7 @@ class QuestionsDaoImplTest extends QuizAbstractTest {
 
     private static final int QUESTIONS_QUANTITY = 3;
 
-    @DisplayName("Test for required quantity of questions")
+    @DisplayName("Возвращает заданное количество вопросов")
     @Test
     void testGetQuestionsRequiredAmount() {
         given(questionsParser.parseQuestions(any()))

@@ -6,8 +6,6 @@ import ru.swmi.quiz.domain.business.Quiz;
 import ru.swmi.quiz.domain.model.Person;
 import ru.swmi.quiz.domain.model.Result;
 
-import javax.annotation.PostConstruct;
-
 @Service
 public class QuizServiceImpl implements QuizService {
 
@@ -31,16 +29,9 @@ public class QuizServiceImpl implements QuizService {
         this.ioService = ioService;
     }
 
-    @PostConstruct
-    public void init() {
-
-    }
-
     @Override
-    public void start() {
-        localeService.selectLanguage();
-        Person newPerson = personService.getPerson();
-        Quiz quiz = new Quiz(questionService.getQuestions(questionsQuantity), newPerson, passedScore);
+    public void start(Person person) {
+        Quiz quiz = new Quiz(questionService.getQuestions(questionsQuantity), person, passedScore);
         quiz.start(quizInteractor);
         Result result = quiz.getResult();
         ioService.printMessage(result.isPassed() ? "quiz.result.passed" : "quiz.result.notPassed",

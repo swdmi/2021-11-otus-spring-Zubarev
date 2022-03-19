@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Test for questions resource loading")
 @SpringBootTest(classes = ContentLoaderResource.class)
 class ContentLoaderResourceTest {
 
@@ -15,6 +14,7 @@ class ContentLoaderResourceTest {
     private ContentLoader contentLoader;
 
     @Test
+    @DisplayName("Возвращает содержимое ресурса с вопросами")
     void readResource() {
         String expected = "Text of Question 1?,1,Yes,No\r\n" +
                 "Text of Question 2?,3,Yes,No,May be\r\n" +
