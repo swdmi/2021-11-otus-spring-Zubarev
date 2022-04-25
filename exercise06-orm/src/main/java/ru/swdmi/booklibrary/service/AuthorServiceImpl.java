@@ -1,6 +1,5 @@
 package ru.swdmi.booklibrary.service;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.swdmi.booklibrary.domain.Author;
@@ -12,7 +11,7 @@ import java.util.List;
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
 
-    public AuthorServiceImpl(@Qualifier("authorRepositoryJpa") AuthorRepository authorRepository) {
+    public AuthorServiceImpl(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
     }
 
