@@ -106,7 +106,7 @@ class BookServiceImplTest {
         Book expectedBook = new Book(100L, "Book1", existingAuthor, existingGenre);
 
         long bookId = expectedBook.getId();
-        given(bookRepository.findById(bookId)).willReturn(Optional.of(expectedBook));
+        given(bookRepository.findByIdWithLazyAll(bookId)).willReturn(Optional.of(expectedBook));
         assertThat(bookService.findById(bookId)).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 
@@ -114,7 +114,7 @@ class BookServiceImplTest {
     @Test
     void shouldThrowExceptionOnNonExistingBookById() {
         long bookId = 0L;
-        given(bookRepository.findById(bookId)).willReturn(Optional.empty());
+        given(bookRepository.findByIdWithLazyAll(bookId)).willReturn(Optional.empty());
         assertThatCode(() -> bookService.findById(bookId)).isInstanceOf(LibraryException.class);
     }
 
@@ -135,7 +135,7 @@ class BookServiceImplTest {
                 .willReturn(Optional.of(existingAuthor));
         given(genreRepository.findById(bookWithIdsSaveRequest.getGenreId()))
                 .willReturn(Optional.of(existingGenre));
-        given(bookRepository.getOne(anyLong()))
+        given(bookRepository.findById(anyLong()))
                 .will(invocation -> Optional.of(new Book(invocation.getArgument(0))));
         given(bookRepository.save(any()))
                 .will(invocation -> invocation.getArgument(0));

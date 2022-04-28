@@ -9,9 +9,7 @@ import org.springframework.context.annotation.Import;
 import ru.swdmi.booklibrary.domain.Book;
 import ru.swdmi.booklibrary.domain.Comment;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -78,15 +76,4 @@ public class CommentRepositoryJpaTest {
 
         assertThat(actualComment).isPresent().get().usingRecursiveComparison().isEqualTo(expectedComment);
     }
-
-    @DisplayName("возвращать список комментариев к одной книге по её идентификатору")
-    @Test
-    void shouldReturnAllCommentsForBook() {
-        List<Comment> actualComments = commentRepository.findByBookId(100L);
-
-        assertThat(actualComments.stream().map(x -> x.getId()).collect(Collectors.toList())).containsExactly(FIRST_COMMENT_ID, SECOND_COMMENT_ID);
-    }
-
-
-
 }

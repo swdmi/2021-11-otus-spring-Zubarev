@@ -23,12 +23,4 @@ public class Genre extends AbstractIdentityIdEntity<Long>{
         setId(id);
         this.name = name;
     }
-
-    @Override
-    public String toString() {
-        return "Genre{" +
-                "id='" + getId() + '\'' +
-                ", name='" + name + '\'' +
-                '}';
-    }
 }

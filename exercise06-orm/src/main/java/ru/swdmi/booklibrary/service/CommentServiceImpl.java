@@ -22,7 +22,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public Comment save(CommentWithIdSaveRequest commentWithIdSaveRequest) {
-        Book book = bookRepository.getOne(commentWithIdSaveRequest.getBookId()).orElseThrow(() -> new LibraryException("Can't find book by id = %s", commentWithIdSaveRequest.getBookId()));
+        Book book = bookRepository.findById(commentWithIdSaveRequest.getBookId()).orElseThrow(() -> new LibraryException("Can't find book by id = %s", commentWithIdSaveRequest.getBookId()));
         Comment comment = new Comment(commentWithIdSaveRequest.getId(), commentWithIdSaveRequest.getText(), book);
         return commentRepository.save(comment);
     }
@@ -40,12 +40,11 @@ public class CommentServiceImpl implements CommentService {
             Comment commentInDb = commentRepository.findById(commentSaveRequest.getId())
                     .orElseThrow(() -> new LibraryException("Can't find comment by id = %s", commentSaveRequest.getId()));
             commentInDb.setText(commentSaveRequest.getText());
-            return commentRepository.save(commentInDb);
+            return commentInDb;
         }
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Comment findById(long id) {
         return commentRepository.findById(id).orElseThrow(() -> new LibraryException("Can't find comment by id = %s", id));
     }
@@ -53,7 +52,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional(readOnly = true)
     public List<Comment> findByBookId(long bookId) {
-        return commentRepository.findByBookId(bookId);
+        return bookRepository.findByIdWithLazyComments(bookId)
+                .map(Book::getComments)
+                .orElseThrow(() -> new LibraryException("Can't find book by id = %s", bookId));
     }
 
     @Override

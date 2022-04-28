@@ -2,7 +2,7 @@ package ru.swdmi.booklibrary.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.swdmi.booklibrary.domain.Book;
 
 import javax.persistence.EntityGraph;
@@ -14,22 +14,31 @@ import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Repository
+@Component
 public class BookRepositoryJpa implements BookRepository {
 
     @PersistenceContext
     private final EntityManager em;
 
     @Override
-    public Optional<Book> getOne(long id) {
+    public Optional<Book> findById(long id) {
         return Optional.ofNullable(em.find(Book.class, id));
     }
 
     @Override
-    public Optional<Book> findById(long id) {
+    public Optional<Book> findByIdWithLazyAll(long id) {
         EntityGraph<?> entityGraph = em.getEntityGraph("authors-genres-entity-graph");
         Map<String, Object> properties = Map.of("javax.persistence.fetchgraph", entityGraph);
         Book book = em.find(Book.class, id, properties);
+        if (book != null) {
+            Hibernate.initialize(book.getComments());
+        }
+        return Optional.ofNullable(book);
+    }
+
+    @Override
+    public Optional<Book> findByIdWithLazyComments(long id) {
+        Book book = em.find(Book.class, id);
         if (book != null) {
             Hibernate.initialize(book.getComments());
         }

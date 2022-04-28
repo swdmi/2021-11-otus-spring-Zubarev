@@ -1,15 +1,13 @@
 package ru.swdmi.booklibrary.repository;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.swdmi.booklibrary.domain.Comment;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class CommentRepositoryJpa implements CommentRepository {
     private final EntityManager em;
@@ -27,16 +25,6 @@ public class CommentRepositoryJpa implements CommentRepository {
     @Override
     public Optional<Comment> findById(long id) {
         return Optional.ofNullable(em.find(Comment.class, id));
-    }
-
-    @Override
-    public List<Comment> findByBookId(long bookId) {
-        TypedQuery<Comment> query = em.createQuery("select c " +
-                        "from Comment c " +
-                        "where c.book.id = :bookId",
-                Comment.class);
-        query.setParameter("bookId", bookId);
-        return query.getResultList();
     }
 
     @Override

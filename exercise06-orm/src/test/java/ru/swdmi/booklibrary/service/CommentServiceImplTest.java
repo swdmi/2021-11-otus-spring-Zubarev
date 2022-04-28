@@ -41,6 +41,7 @@ class CommentServiceImplTest {
     static void setUpClass() {
         existingBook = new Book(1L, "Book name", new Author(1L, "Somebody"), new Genre(1L, "Somewhat"));
         existingComment = new Comment(1L, "Text of comment", existingBook);
+        existingBook.getComments().add(existingComment);
     }
 
     @DisplayName("сохранять новый комментарий с указанием идентификаторов автора и жанра")
@@ -48,7 +49,7 @@ class CommentServiceImplTest {
     void shouldSaveNewCommentWithBookId() {
         CommentWithIdSaveRequest commentSaveRequest = new CommentWithIdSaveRequest("text of comment", 1L);
 
-        given(bookRepository.getOne(1L)).willReturn(Optional.of(existingBook));
+        given(bookRepository.findById(1L)).willReturn(Optional.of(existingBook));
         given(commentRepository.save(any(Comment.class))).will(invocation -> invocation.getArgument(0));
 
         Comment comment = commentService.save(commentSaveRequest);
@@ -93,7 +94,7 @@ class CommentServiceImplTest {
     @DisplayName("возращать все комментарии, относящиеся к одной книге")
     @Test
     void shouldReturnExistingCommentsByBookId() {
-        given(commentRepository.findByBookId(existingBook.getId())).willReturn(List.of(existingComment));
+        given(bookRepository.findByIdWithLazyComments(existingBook.getId())).willReturn(Optional.of(existingBook));
 
         List<Comment> actualCommentList = commentService.findByBookId(existingBook.getId());
         assertThat(actualCommentList).containsExactly(existingComment);

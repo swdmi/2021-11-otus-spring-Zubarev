@@ -50,22 +50,7 @@ public class BookServiceImpl implements BookService {
         return innerSave(bookSaveRequest, author, genre);
     }
 
-    private Book innerSave(AbstractBookSaveRequest bookSaveRequest, Author author, Genre genre) {
-        if (bookSaveRequest.isCreatable()) {
-            Book book = new Book(bookSaveRequest.getTitle(), author, genre);
-            return bookRepository.save(book);
-        } else {
-            Book bookInDb = bookRepository.getOne(bookSaveRequest.getId())
-                    .orElseThrow(() -> new LibraryException("Can't find book by id = %s", bookSaveRequest.getId()));
-            bookInDb.setAuthor(author);
-            bookInDb.setGenre(genre);
-            bookInDb.setTitle(bookSaveRequest.getTitle());
-            return bookRepository.save(bookInDb);
-        }
-    }
-
     @Override
-    @Transactional(readOnly = true)
     public List<Book> findAll() {
         return bookRepository.findAll();
     }
@@ -73,12 +58,26 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional(readOnly = true)
     public Book findById(long id) {
-        return bookRepository.findById(id).orElseThrow(() -> new LibraryException("Can't find book by id = %s", id));
+        return bookRepository.findByIdWithLazyAll(id).orElseThrow(() -> new LibraryException("Can't find book by id = %s", id));
     }
 
     @Override
     @Transactional
     public void deleteById(long id) {
         bookRepository.delete(id);
+    }
+
+    private Book innerSave(AbstractBookSaveRequest bookSaveRequest, Author author, Genre genre) {
+        if (bookSaveRequest.isCreatable()) {
+            Book book = new Book(bookSaveRequest.getTitle(), author, genre);
+            return bookRepository.save(book);
+        } else {
+            Book bookInDb = bookRepository.findById(bookSaveRequest.getId())
+                    .orElseThrow(() -> new LibraryException("Can't find book by id = %s", bookSaveRequest.getId()));
+            bookInDb.setAuthor(author);
+            bookInDb.setGenre(genre);
+            bookInDb.setTitle(bookSaveRequest.getTitle());
+            return bookInDb;
+        }
     }
 }

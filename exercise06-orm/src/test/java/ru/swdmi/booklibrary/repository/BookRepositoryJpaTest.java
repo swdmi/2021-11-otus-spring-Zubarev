@@ -62,7 +62,7 @@ class BookRepositoryJpaTest {
         em.clear();
 
         assertThat(newBook.getId()).isNotNull();
-        Book actualBook = bookRepository.findById(newBook.getId()).orElseThrow();
+        Book actualBook = bookRepository.findByIdWithLazyAll(newBook.getId()).orElseThrow();
 
         assertThat(actualBook.getTitle()).isEqualTo(newBook.getTitle());
         assertThat(actualBook.getAuthor()).isEqualTo(newBook.getAuthor());
@@ -72,7 +72,7 @@ class BookRepositoryJpaTest {
     @DisplayName("возвращать ожидаемую книгу по её идентификатору")
     @Test
     void shouldReturnExpectedBookById() {
-        Book actualBook = bookRepository.getOne(expectedBook.getId()).orElseThrow();
+        Book actualBook = bookRepository.findById(expectedBook.getId()).orElseThrow();
         Book expectedBookFromDb = em.find(Book.class, expectedBook.getId());
 
         em.clear();
@@ -81,14 +81,27 @@ class BookRepositoryJpaTest {
 
     @DisplayName("возвращать полную информацию об ожидаемой книге по её идентификатору")
     @Test
-    void shouldReturnExpectedBookFullInfoById() {
-        Book actualBook = bookRepository.findById(expectedBook.getId()).orElseThrow();
+    void shouldReturnExpectedBookIdWithLazyAll() {
+        Book actualBook = bookRepository.findByIdWithLazyAll(expectedBook.getId()).orElseThrow();
         Book expectedBookFromDb = em.find(Book.class, expectedBook.getId());
 
         em.clear();
         PersistenceUnitUtil unitUtil = em.getEntityManager().getEntityManagerFactory().getPersistenceUnitUtil();
 
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBookFromDb);
+        assertThat(unitUtil.isLoaded(actualBook.getComments())).isTrue();
+    }
+
+    @DisplayName("возвращать информацию об ожидаемой книге вместе с комментариями по идентификатору книги")
+    @Test
+    void shouldReturnExpectedBookByIdWithLazyComments() {
+        Book actualBook = bookRepository.findByIdWithLazyComments(expectedBook.getId()).orElseThrow();
+        Book expectedBookFromDb = em.find(Book.class, expectedBook.getId());
+
+        em.clear();
+        PersistenceUnitUtil unitUtil = em.getEntityManager().getEntityManagerFactory().getPersistenceUnitUtil();
+
+        assertThat(actualBook).isEqualTo(expectedBookFromDb);
         assertThat(unitUtil.isLoaded(actualBook.getComments())).isTrue();
     }
 
@@ -103,7 +116,7 @@ class BookRepositoryJpaTest {
         em.flush();
         em.clear();
 
-        Book actualBook = bookRepository.findById(expectedBook.getId()).orElseThrow();
+        Book actualBook = bookRepository.findByIdWithLazyAll(expectedBook.getId()).orElseThrow();
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 

@@ -6,8 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookRepository {
-    Optional<Book> getOne(long id);
     Optional<Book> findById(long id);
+    Optional<Book> findByIdWithLazyAll(long id);
+    Optional<Book> findByIdWithLazyComments(long id);
     List<Book> findByName(String bookTitle);
     Book save(Book book);
     void delete(long id);

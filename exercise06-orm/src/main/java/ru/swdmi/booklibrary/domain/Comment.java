@@ -8,17 +8,16 @@ import javax.persistence.*;
 
 @NoArgsConstructor
 @Entity
+@Getter
 @Table(name = "comments")
 public class Comment extends AbstractIdentityIdEntity<Long> {
 
-    @Getter
     @Setter
     @Column
     private String text;
 
-    @Getter
     @JoinColumn(name = "book_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Book book;
 
 

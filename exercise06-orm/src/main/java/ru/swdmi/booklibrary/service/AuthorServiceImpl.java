@@ -1,7 +1,6 @@
 package ru.swdmi.booklibrary.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.swdmi.booklibrary.domain.Author;
 import ru.swdmi.booklibrary.repository.AuthorRepository;
 
@@ -16,7 +15,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Author> findAll() {
         return authorRepository.findAll();
     }
