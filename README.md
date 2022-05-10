@@ -10,3 +10,6 @@
 Домашнее задание №5 - exercise05-jdbc
 
 Домашнее задание №6 - exercise06-orm
+
+Домашнее задание №7 - exercise07-spring-data
+

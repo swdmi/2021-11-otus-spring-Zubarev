@@ -1,0 +1,48 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.6'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group 'org.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+ext {
+    springShellVersion = '2.0.1.RELEASE'
+    h2Version = '2.1.210'
+    lombokVersion = '1.18.22'
+    mapstructVersion = '1.4.2.Final'
+    lombokMapstructBindingVersion = '0.2.0'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation "org.springframework.shell:spring-shell-starter:$springShellVersion"
+    implementation "com.h2database:h2:$h2Version"
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    implementation "org.mapstruct:mapstruct:$mapstructVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:$lombokMapstructBindingVersion"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+
+test {
+    useJUnitPlatform()
+}
